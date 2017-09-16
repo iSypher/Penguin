@@ -1,6 +1,6 @@
 **Penguin**
 
-Club Penguin proxy written in Node.js
+Club Penguin proxy server written in Node.js
 
 **Installation**
 ```
