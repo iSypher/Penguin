@@ -2,6 +2,7 @@ const net = require('net');
 const GameClient = require('../game/GameClient');
 const Logger = require('../logging/Logger');
 const config = require('../../config/Config');
+const Constants = require('../util/Constants');
 
 class TCPServer {
   constructor() {
@@ -32,8 +33,10 @@ class TCPServer {
    * @public
    */
   listen() {
+    if (this._server) throw new Error(Constants.Error.SERVER_INSTANTIATED);
+
     this.server = net.createServer(socket => {
-      new GameClient(this, socket);
+      socket.session = new GameClient(this, socket);
       socket.setEncoding('binary');
     });
 

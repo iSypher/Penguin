@@ -1,6 +1,7 @@
 const NullDelimiter = require('../network/delimiter/NullDelimiter');
 const Proxy = require('../network/Proxy');
 const Logger = require('../logging/Logger');
+const PacketManager = require('../network/packets/PacketManager');
 
 class GameClient {
   constructor(server, socket) {
@@ -47,7 +48,24 @@ class GameClient {
   }
 
   onData(data) {
-    Logger.silly(`[Sending to Game]: ${data}`);
+    let type = PacketManager.check(data);
+
+    switch (type) {
+      case PacketManager.packetType.XML:
+        this.write(data);
+        break;
+
+      case PacketManager.packetType.XT:
+        this.write(data);
+        break;
+
+      case PacketManager.packetType.UNDEFINED:
+        // Todo: close connection
+        break;
+    }
+  }
+
+  write(data) {
     this._proxy.socket.write(`${data}\x00`);
   }
 
