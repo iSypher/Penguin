@@ -35,18 +35,18 @@ class TCPServer {
   listen() {
     if (this._server) throw new Error(Constants.Error.SERVER_INSTANTIATED);
 
-    this.server = net.createServer(socket => {
+    this._server = net.createServer(socket => {
       socket.session = new GameClient(this, socket);
       socket.setEncoding('binary');
     });
 
-    this.server.on('error', err => {
+    this._server.on('error', err => {
       throw err;
     });
 
-    this.server.maxConnections = this.config.Server.maxConnections;
+    this._server.maxConnections = this.config.Server.maxConnections;
 
-    this.server.listen({
+    this._server.listen({
       port: 6113,
       backlog: 10,
       exclusive: false,
